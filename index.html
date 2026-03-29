@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCHÜBEE SAMPLER</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #111;
+  color: white;
+  text-align: center;
+}
+
+button {
+  padding: 20px;
+  font-size: 20px;
+  margin: 10px;
+  border-radius: 10px;
+  border: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.kill {
+  background: red;
+  width: 100%;
+}
+
+.pad {
+  background: #222;
+  padding: 10px;
+  margin: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>SCHÜBEE SAMPLER</h1>
+
+<button class="kill" onclick="killAll()">KILL</button>
+
+<div class="grid" id="pads"></div>
+
+<script>
+const files = [
+"mp3/jingle1.mp3",
+"mp3/jingle2.mp3",
+"mp3/jingle3.mp3",
+"mp3/jingle4.mp3",
+"mp3/jingle5.mp3",
+"mp3/jingle6.mp3",
+"mp3/jingle7.mp3",
+"mp3/jingle8.mp3",
+"mp3/jingle9.mp3",
+"mp3/jingle10.mp3"
+];
+
+const pads = [];
+
+files.forEach((file, i) => {
+  const audio = new Audio(file);
+  audio.volume = 1;
+
+  const pad = { audio, playing: false };
+  pads.push(pad);
+
+  const div = document.createElement("div");
+  div.className = "pad";
+
+  const btn = document.createElement("button");
+  btn.textContent = "START " + (i+1);
+
+  btn.onclick = () => {
+    if (!pad.playing) {
+      audio.currentTime = 0;
+      audio.play();
+      pad.playing = true;
+      btn.textContent = "STOP " + (i+1);
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
+      pad.playing = false;
+      btn.textContent = "START " + (i+1);
+    }
+  };
+
+  div.appendChild(btn);
+  document.getElementById("pads").appendChild(div);
+});
+
+function killAll() {
+  pads.forEach(p => {
+    p.audio.pause();
+    p.audio.currentTime = 0;
+    p.playing = false;
+  });
+}
+</script>
+
+</body>
+</html>
